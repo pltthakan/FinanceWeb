@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Profil - {{ user.username }}{% endblock %}
+{% block content %}
+<div class="profile-container mb-4">
+  <div class="profile-header d-flex align-items-center">
+    <div class="profile-image me-3">
+      {% if user.profile_image %}
+        <!-- Profil resmi yüklü ise -->
+        <img src="{{ url_for('static', filename='profile_images/' ~ user.profile_image) }}" alt="{{ user.username }}'in Profil Resmi">
+      {% else %}
+        <!-- Profil resmi yoksa, kullanıcının adının ilk harfi -->
+        <div class="profile-fallback">
+          {{ user.username[0]|upper }}
+        </div>
+      {% endif %}
+    </div>
+    <div class="profile-info">
+      <h2>{{ user.username }}</h2>
+      {% if current_user and current_user.id != user.id %}
+        {% if current_user.is_following(user) %}
+          <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+            <button type="submit" class="btn btn-danger btn-sm">Takipten Çık</button>
+          </form>
+        {% else %}
+          <form action="{{ url_for('follow', username=user.username) }}" method="post">
+            <button type="submit" class="btn btn-primary btn-sm">Takip Et</button>
+          </form>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Takipçi ve Takip Edilen Bölümü -->
+  <div class="profile-stats my-3">
+    <a class="me-3" data-bs-toggle="collapse" href="#followersList" role="button" aria-expanded="false" aria-controls="followersList">
+      Takipçi: {{ user.followers.count() }}
+    </a>
+    <a data-bs-toggle="collapse" href="#followingList" role="button" aria-expanded="false" aria-controls="followingList">
+      Takip Edilen: {{ user.followed.count() }}
+    </a>
+  </div>
+
+  <!-- Collapse: Takipçiler Listesi -->
+  <div class="collapse" id="followersList">
+    <div class="card card-body">
+      <h5>Takipçiler</h5>
+      {% if user.followers.count() > 0 %}
+        <ul class="list-unstyled">
+          {% for follower in user.followers.all() %}
+            <li>
+              <a href="{{ url_for('profile', username=follower.username) }}">{{ follower.username }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Henüz takipçisi yok.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Collapse: Takip Edilenler Listesi -->
+  <div class="collapse" id="followingList">
+    <div class="card card-body">
+      <h5>Takip Edilenler</h5>
+      {% if user.followed.count() > 0 %}
+        <ul class="list-unstyled">
+          {% for followed in user.followed.all() %}
+            <li>
+              <a href="{{ url_for('profile', username=followed.username) }}">{{ followed.username }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Henüz takip ettiği kimse yok.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Kullanıcının Yorumları -->
+<div class="profile-comments">
+  <h3>Yorumlar</h3>
+  {% if comments %}
+    {% for comment in comments %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="text-muted">{{ comment.timestamp.strftime("%d/%m/%Y %H:%M") }}</p>
+          <p>{{ comment.content }}</p>
+          <p>
+            <small>Like: {{ comment.like_count }} / Dislike: {{ comment.dislike_count }}</small>
+          </p>
+          <!-- Yorum silme butonu (yorum sahibi ise) -->
+          {% if current_user and comment.user_id == current_user.id %}
+            <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-warning">Sil</button>
+            </form>
+          {% endif %}
+          <!-- Alt yorum varsa toggle butonu -->
+          {% if comment.replies.count() > 0 %}
+            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="collapse" data-bs-target="#replies{{ comment.id }}" aria-expanded="false" aria-controls="replies{{ comment.id }}">
+              <i class="bi bi-chat"></i> Alt Yorumlar ({{ comment.replies.count() }})
+            </button>
+          {% endif %}
+          <!-- Alt yorumlar (collapse içerisinde) -->
+          <div class="collapse mt-2" id="replies{{ comment.id }}">
+            {% for reply in comment.replies.order_by(Comment.timestamp.asc()).all() %}
+              <div class="card mb-2 ms-4">
+                <div class="card-body">
+                  <p class="text-muted">{{ reply.timestamp.strftime("%d/%m/%Y %H:%M") }}</p>
+                  <p>{{ reply.content }}</p>
+                  <p>
+                    <small>Like: {{ reply.like_count }} / Dislike: {{ reply.dislike_count }}</small>
+                  </p>
+                  {% if current_user and reply.user_id == current_user.id %}
+                    <form action="{{ url_for('delete_comment', comment_id=reply.id) }}" method="post" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-warning">Sil</button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Henüz yorum yapılmamış.</p>
+  {% endif %}
+</div>
+{% endblock %}

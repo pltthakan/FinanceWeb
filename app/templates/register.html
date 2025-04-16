@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Kayıt Ol{% endblock %}
+{% block content %}
+<div class="card mx-auto" style="max-width: 500px;">
+  <div class="card-header bg-secondary text-white">
+    Kayıt Ol
+  </div>
+  <div class="card-body">
+    <form action="{{ url_for('register') }}" method="post">
+      <div class="mb-3">
+        <label for="username" class="form-label">Kullanıcı Adı</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">E-Posta</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Şifre</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <div class="mb-3">
+        <label for="confirm" class="form-label">Şifre Tekrar</label>
+        <input type="password" class="form-control" id="confirm" name="confirm" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

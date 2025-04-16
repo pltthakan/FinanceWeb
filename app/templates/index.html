@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Ana Sayfa{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4 text-center">Ana Sayfa</h1>
+
+  <!-- Döviz Kurları -->
+<section class="mb-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h5 mb-0">Döviz Kurları</h2>
+    </div>
+    <div class="card-body">
+      {% if exchange_rates %}
+        <div class="table-responsive">
+          <table id="rates-table" class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Para Birimi</th>
+                <th>TL Karşılığı</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for currency, rate in exchange_rates.items() %}
+                <tr>
+                  <td>{{ currency }}</td>
+                  <td>{{ rate }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">Döviz kurları alınamadı.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+  <!-- Bitcoin Bilgileri -->
+<section class="mb-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-warning text-dark">
+      <h2 class="h5 mb-0">Bitcoin Bilgileri</h2>
+    </div>
+    <div class="card-body">
+      {% if bitcoin_price %}
+        <p class="lead">
+          1 BTC = <strong id="bitcoin-price">{{ bitcoin_price }} TRY</strong>
+          <span id="bitcoin-indicator" class="rate-indicator neutral"></span>
+        </p>
+      {% else %}
+        <p class="text-muted">Bitcoin fiyatı alınamadı.</p>
+      {% endif %}
+      {% if bitcoin_details %}
+        <ul class="list-group list-group-flush mt-3">
+          <li class="list-group-item">
+            Market Cap: <span id="bitcoin-marketcap">{{ bitcoin_details.market_cap_try }}</span> TRY
+          </li>
+          <li class="list-group-item">
+            24 Saatlik Hacim: <span id="bitcoin-volume">{{ bitcoin_details.volume_24h_try }}</span> TRY
+          </li>
+          <li class="list-group-item">
+            24 Saatlik Değişim: <span id="bitcoin-change">{{ bitcoin_details.price_change_percentage_24h }}</span>%
+          </li>
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+ <!-- Diğer Kripto Paralar -->
+<section class="mb-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+      <h2 class="h5 mb-0">Diğer Kripto Paralar</h2>
+    </div>
+    <div class="card-body">
+      {% if other_crypto %}
+        <div class="row">
+          {% for crypto, details in other_crypto.items() %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
+                <div class="card-header text-white" style="background-color: #007bff;">
+                  <h5 class="card-title mb-0">{{ crypto|capitalize }}</h5>
+                </div>
+                <div class="card-body">
+                  {% if details.price_try %}
+                    <p>
+                      <strong>Fiyat:</strong>
+                      <span id="crypto-{{ crypto }}-price">{{ details.price_try }}</span> TRY
+                      <span id="crypto-{{ crypto }}-indicator" class="rate-indicator neutral"></span>
+                    </p>
+                    <p>
+                      <strong>24s Değişim:</strong>
+                      {% if details.price_change_percentage_24h != "N/A" and details.price_change_percentage_24h is not none %}
+                        {% set change = details.price_change_percentage_24h %}
+                        {% if change > 0 %}
+                          <span class="badge bg-success">{{ change }}%</span>
+                        {% elif change < 0 %}
+                          <span class="badge bg-danger">{{ change }}%</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{{ change }}%</span>
+                        {% endif %}
+                      {% else %}
+                        N/A
+                      {% endif %}
+                    </p>
+                    <p><strong>Market Cap:</strong> {{ details.market_cap_try }} TRY</p>
+                    <p><strong>24h Hacim:</strong> {{ details.volume_24h_try }} TRY</p>
+                  {% else %}
+                    <p>Veri alınamadı.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted">Diğer kripto para verileri alınamadı.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+
+ <!-- Diğer Varlıklar -->
+<section class="mb-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h2 class="h5 mb-0">Diğer Varlıklar</h2>
+    </div>
+    <div class="card-body">
+      {% if asset_prices %}
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Gram Altın: <span id="asset-gram_altin">{{ asset_prices.gram_altin }}</span> TRY
+            <span id="asset-gram_altin-indicator" class="rate-indicator neutral"></span>
+          </li>
+          <li class="list-group-item">
+            Ons Altın: <span id="asset-ons_altin">{{ asset_prices.ons_altin }}</span> TRY
+            <span id="asset-ons_altin-indicator" class="rate-indicator neutral"></span>
+          </li>
+          <li class="list-group-item">
+            Gümüş: <span id="asset-gumus">{{ asset_prices.gumus }}</span> TRY
+            <span id="asset-gumus-indicator" class="rate-indicator neutral"></span>
+          </li>
+          <li class="list-group-item">
+            BIST 100: <span id="asset-bist100">{{ asset_prices.bist100 }}</span> TRY
+            <span id="asset-bist100-indicator" class="rate-indicator neutral"></span>
+          </li>
+        </ul>
+      {% else %}
+        <p class="text-muted">Varlık verileri alınamadı.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+  <!-- Piyasa Haberleri -->
+  <section class="mb-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-secondary text-white">
+        <h2 class="h5 mb-0">Piyasa Haberleri</h2>
+      </div>
+      <div class="card-body">
+        {% if market_news %}
+          <div class="list-group">
+            {% for article in market_news %}
+              <a href="{{ article.url }}" target="_blank" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ article.title }}</h5>
+                  <small>Detaylar</small>
+                </div>
+                <p class="mb-1">{{ article.description }}</p>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">Haber verileri alınamadı.</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

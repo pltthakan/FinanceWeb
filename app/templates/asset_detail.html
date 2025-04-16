@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}{{ asset_name }} Detay{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2>{{ asset_name }} Detay</h2>
+  <table class="table table-bordered">
+    <tr>
+      <th>Mevcut Fiyat</th>
+      <td>{{ details["Mevcut Fiyat"] or "N/A" }}</td>
+    </tr>
+    <tr>
+      <th>Alış</th>
+      <td>{{ details["Alış"] or "N/A" }}</td>
+    </tr>
+    <tr>
+      <th>Satış</th>
+      <td>{{ details["Satış"] or "N/A" }}</td>
+    </tr>
+    <tr>
+      <th>Fark (%)</th>
+      <td>{{ details["Fark (%)"] or "N/A" }}</td>
+    </tr>
+    <tr>
+      <th>Günün En Düşük Değeri</th>
+      <td>{{ details["Günün En Düşük Değeri"] or "N/A" }}</td>
+    </tr>
+    <tr>
+      <th>Günün En Yüksek Değeri</th>
+      <td>{{ details["Günün En Yüksek Değeri"] or "N/A" }}</td>
+    </tr>
+  </table>
+
+  <h3>Grafik</h3>
+  <div class="btn-group mb-3" role="group" aria-label="Timeframe">
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="1d">1 Günlük</button>
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="5d">5 Günlük</button>
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="1mo">1 Aylık</button>
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="1y">1 Yıllık</button>
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="5y">5 Yıllık</button>
+    <button class="btn btn-secondary timeframe-btn" data-timeframe="max">Maks</button>
+  </div>
+  <canvas id="assetChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Chart.js kütüphanesini dahil ediyoruz -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('assetChart').getContext('2d');
+    let assetChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '{{ asset_name }} Fiyat',
+          data: [],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          fill: false,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            display: true,
+            title: { display: true, text: 'Tarih' }
+          },
+          y: {
+            display: true,
+            title: { display: true, text: 'Fiyat' }
+          }
+        }
+      }
+    });
+
+    function updateChart(timeframe) {
+      fetch(`/asset/{{ asset_name }}/chart/${timeframe}`)
+        .then(response => response.json())
+        .then(data => {
+          if(data.error) {
+             alert(data.error);
+          } else {
+             assetChart.data.labels = data.labels;
+             assetChart.data.datasets[0].data = data.prices;
+             assetChart.update();
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Sayfa yüklendiğinde varsayılan olarak 1 günlük grafiği göster
+    updateChart("1d");
+
+    // Buton tıklama olayları
+    document.querySelectorAll(".timeframe-btn").forEach(function(button) {
+       button.addEventListener("click", function() {
+          const timeframe = this.getAttribute("data-timeframe");
+          updateChart(timeframe);
+       });
+    });
+  });
+</script>
+{% endblock %}

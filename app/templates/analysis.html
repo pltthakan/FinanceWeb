@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Analiz - Kripto Fiyat Grafikleri{% endblock %}
+{% block content %}
+<h1 class="mb-4">Kripto Fiyat Analizi (Son 30 Gün)</h1>
+<div class="row">
+  {% for crypto, data in historical_data.items() %}
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-secondary text-white">
+          {{ crypto|capitalize }} Fiyat Grafiği
+        </div>
+        <div class="card-body">
+          <canvas id="chart-{{ crypto }}"></canvas>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<div class="card mb-4">
+  <div class="card-header bg-secondary text-white">
+    Bitcoin RSI Grafiği
+  </div>
+  <div class="card-body">
+    <canvas id="chart-bitcoin-rsi"></canvas>
+  </div>
+</div>
+<script>
+  // Tarihsel verileri JS'e aktar
+  const cryptoHistoricalData = {{ historical_data|tojson }};
+  Object.keys(cryptoHistoricalData).forEach(function(crypto) {
+    const data = cryptoHistoricalData[crypto];
+    const labels = data.map(item => {
+      let date = new Date(item.time);
+      return date.toLocaleDateString("tr-TR");
+    });
+    const prices = data.map(item => item.price);
+    const ctx = document.getElementById('chart-' + crypto).getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: crypto.charAt(0).toUpperCase() + crypto.slice(1) + ' Fiyatı (TRY)',
+          data: prices,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderWidth: 2,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: { x: { display: true }, y: { display: true } }
+      }
+    });
+  });
+
+  // Bitcoin RSI grafiği
+  const technicalIndicators = {{ technical_indicators|tojson }};
+  if (technicalIndicators.bitcoin && technicalIndicators.bitcoin.rsi) {
+    const bitcoinData = cryptoHistoricalData['bitcoin'];
+    const labels = bitcoinData.map(item => {
+      let date = new Date(item.time);
+      return date.toLocaleDateString("tr-TR");
+    });
+    const rsiValues = technicalIndicators.bitcoin.rsi;
+    const ctxRSI = document.getElementById('chart-bitcoin-rsi').getContext('2d');
+    new Chart(ctxRSI, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Bitcoin RSI',
+          data: rsiValues,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderWidth: 2,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: {
+          x: { display: true },
+          y: {
+            display: true,
+            min: 0,
+            max: 100,
+            ticks: { stepSize: 10 }
+          }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}
