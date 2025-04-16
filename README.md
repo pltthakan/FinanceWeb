@@ -26,7 +26,6 @@
    - [Veri İşleme ve Hata Yönetimi](#veri-işleme-ve-hata-yönetimi)
 9. [Kullanıcı Arayüzü ve İş Akışları](#kullanıcı-arayüzü-ve-iş-akışları)
    - [Ana Sayfa ve Veri Görselleştirme](#ana-sayfa-ve-veri-görselleştirme)
-   - [Alarm ve Bildirim Sistemi](#alarm-ve-bildirim-sistemi)
    - [Kullanıcı Etkileşimleri](#kullanıcı-etkileşimleri)
 10. [Test Süreçleri](#test-süreçleri)
 11. [Dağıtım ve Yayına Alma](#dağıtım-ve-yayına-alma)
@@ -221,22 +220,16 @@ doviz_takip/
 
 ### 1. Ana Sayfa
 - **Gösterim:**  
-  - Anlık döviz kurlarının listelendiği dinamik bir ekran.
+  - Anlık kurlarının listelendiği dinamik bir ekran.
   - Kullanıcılar, güncel verileri, grafik ve tablolar aracılığıyla izleyebilir.
   
 - **Özellikler:**  
   - Otomatik güncelleme: Belirli aralıklarla arka planda API çağrıları yapılarak veriler yenilenir.
-  - Veri sıralama: Artan/azalan sıralama seçenekleri sunulur.
 
-### 2. Alarm Kurma ve Bildirim
-- **Kurulum:**  
-  - Kullanıcı, takip etmek istediği döviz çiftleri için eşik değer belirler.
-  - Belirlenen eşik değerlerin aşılması durumunda sistem alarm tetikler.
+### 2. Canlı Degisim Gösterge
+- **Sembol Degişimi:**  
+  - Artış durumunda yeşil ok azalış durumunda kırmızı ok ile gösterilir
   
-- **Bildirimler:**  
-  - E-posta veya push bildirim seçenekleri (sistem yapılandırmasına göre) entegre edilebilir.
-  - Arayüz üzerinden aktif/alarm listesi yönetimi sağlanır.
-
 ### 3. Grafiksel Veri Görselleştirme
 - **Analiz Araçları:**  
   - Geçmiş verilerin çizgi grafik, bar grafik gibi görsel analizleri.
@@ -304,18 +297,10 @@ doviz_takip/
   - Jinja2 sözdizimi ile dinamik içerik yerleştirilir.
   
 - **İş Akışı:**  
-  - Kullanıcı ana sayfaya geldiğinde, backend `routes.py` içerisindeki ilgili fonksiyon çağrılır.
+  - Kullanıcı ana sayfaya geldiğinde, backend `routes` içerisindeki ilgili fonksiyon çağrılır.
   - API’den çekilen veriler HTML içerisinde dinamik olarak sunulur.
   - Grafikler için JavaScript kütüphaneleri (örneğin, Chart.js) entegre edilebilir.
 
-### Alarm ve Bildirim Sistemi
-- **Alarm Kurulumu:**  
-  - Kullanıcı, belirlediği eşik değerleri ayarlayabilmek üzere özel bir form doldurur.
-  - Form verileri, backend üzerinde işlenir ve kullanıcıya ait alarm kayıtları veritabanına eklenir.
-  
-- **Bildirim:**  
-  - Alarm koşulları tetiklenirse, backend tetikleyici fonksiyonlarla bildirim gönderir.
-  - Bildirim yöntemleri: E-posta, sistem içi uyarı veya mobil bildirim entegrasyonu.
 
 ### Kullanıcı Etkileşimleri
 - **Dinamik Formlar:**  
