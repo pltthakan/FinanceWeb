@@ -195,24 +195,26 @@ doviz_takip/
   - Flask uygulamasını yapılandırır.
   - Veritabanı bağlantısını ve diğer global ayarları başlatır.
   
-- **app/routes:**  
-  - Kullanıcı isteklerine cevap veren URL tanımlamaları.
-  - Veri çekme, işleme ve şablon render etme işlemleri burada yönetilir.
+- **app/admin.py:**  
+  - Yönetici paneli oluşturur ve veritabanı modellerini bu panele ekler.
   
-- **app/api.py:**  
-  - ExchangeRate API ya da benzeri servislerden veri çekmek için gerekli fonksiyonları içerir.
-  - API çağrılarında hata yönetimi ve zaman aşımları burada ele alınır.
+- **app/config.py:**  
+  - Uygulamanın veritabanı, önbellek ve API bağlantı ayarlarını içerir.
   
 - **app/models.py:**  
-  - Veri tabanı modelleri (ORM kullanılıyorsa; örneğin SQLAlchemy ile) bulunur.
-  - Döviz verileri, kullanıcı tercihleri ve alarm ayarları gibi veriler burada saklanır.
+  - Bu dosya, uygulamanın veritabanı modellerini, admin erişimini, takip/yorum/like sistemini ve admin panelini tanımlar.
   
 - **app/utils.py:**  
-  - Loglama, hata yönetimi, ve diğer yardımcı işlevsellik.
+  - döviz kurları, kripto paralar, altın/gümüş fiyatları, BIST 100 endeksi ve piyasa haberlerini almak için yazılmış yardımcı fonksiyonlardır.
+  - Veriler genellikle yfinance veya bir API üzerinden çekilir ve web uygulamasında kullanılmak üzere işlenir.
   
-- **tests/**  
-  - Her birim modül için kapsamlı testler yer alır.
-  - Uygulamanın sağlam çalıştığından emin olmak için düzenli çalıştırılmalıdır.
+- **test/**  
+  - Bu kodlar, Selenium kullanılarak geliştirilen bir Flask tabanlı finans web uygulamasının otomatik testlerini yapar.
+  - Genel olarak:
+      -Sayfa içeriklerinin (ana sayfa, haberler, analiz vs.) doğru yüklendiğini,
+      -Kullanıcı kayıt ve giriş işlemlerinin çalıştığını,
+      -Döviz çeviricinin doğru çalıştığını,
+      -Yorum ekleme ve profil görüntüleme gibi kullanıcı etkileşimlerinin düzgün olduğunu kontrol eder.
 
 ---
 
