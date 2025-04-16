@@ -437,12 +437,6 @@ Geliştirme planları, kullanıcı geri bildirimleri ve proje geliştiricilerini
 
 ---
 
-## Lisans
-
-Bu proje, MIT Lisansı kapsamında lisanslanmıştır. Daha fazla detay için [LICENSE](LICENSE) dosyasını inceleyebilirsiniz.
-
----
-
 ## Ek Bilgiler ve Kaynaklar
 
 - **Resmi Flask Dokümantasyonu:** [Flask Documentation](https://flask.palletsprojects.com)
@@ -453,6 +447,6 @@ Bu proje, MIT Lisansı kapsamında lisanslanmıştır. Daha fazla detay için [L
   
 ---
 
-Bu kapsamlı dökümantasyon, projenin her bir adımını, kullanılan teknolojilerden işleyiş detaylarına kadar her noktayı ele almayı amaçlamaktadır. Proje ilerledikçe veya yeni özellikler eklendikçe bu dokümantasyonu güncel tutmak, ekip içi bilgi paylaşımını kolaylaştıracak ve yeni katkıda bulunacak geliştiriciler için bir referans olacaktır.
 
-Herhangi bir ek sorunuz veya detaylandırmamı istediğiniz bir kısım olursa, lütfen bildir!
+
+
