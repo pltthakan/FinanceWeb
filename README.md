@@ -326,14 +326,8 @@ doviz_takip/
 
 ## Test Süreçleri
 
-Modül / Sayfa | Test Ediliyor mu? | Açıklama
-Ana Sayfa | ✅ | Sayfa elemanlarının varlığı kontrol ediliyor.
-Kayıt & Giriş | ✅ | Gerçek kullanıcı akışıyla kayıt ve login işlemi test edilmiş.
-Döviz Dönüştürücü | ✅ | Form işlemleri ve sonuç çıktısı kontrol ediliyor.
-Yorum Sistemi | ✅ | Giriş sonrası yorum yazma ve görünürlüğü test edilmiş.
-Profil Sayfası | ✅ | Kullanıcıya özel sayfa, yorum bölümü dahil kontrol ediliyor.
-Haber Sayfası | ✅ | Dinamik içerik olan haber kartları test edilmiş.
-Analiz Sayfası | ✅ | Grafik elemanlarının yüklendiği doğrulanmış.
+![Ekran görüntüsü 2025-04-16 114202](https://github.com/user-attachments/assets/e543c239-313d-4138-8094-7b3b988ef6fa)
+
 ---
 
 ## Dağıtım ve Yayına Alma
