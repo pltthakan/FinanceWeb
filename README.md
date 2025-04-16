@@ -1,8 +1,8 @@
-Aşağıda, "Döviz Takip Uygulaması" projen için kapsamlı, ayrıntılı ve derinlemesine bir dökümantasyon örneği yer alıyor. Bu dokümantasyon örneği, projenin tüm yönlerine değinerek hem geliştiricilerin hem de son kullanıcıların projenin mimarisini, kullanımı ve gelecekteki geliştirme planlarını kolayca anlayabilmesi amacıyla hazırlanmıştır. Kendi projenin ihtiyaçlarına göre bazı bölümleri genişletebilir veya düzenleyebilirsin.
+
 
 ---
 
-# Döviz Takip Uygulaması - Kapsamlı Dokümantasyon
+# Döviz Takip Uygulaması 
 
 ## İçindekiler
 
