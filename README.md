@@ -28,7 +28,7 @@
    - [Ana Sayfa ve Veri Görselleştirme](#ana-sayfa-ve-veri-görselleştirme)
    - [Alarm ve Bildirim Sistemi](#alarm-ve-bildirim-sistemi)
    - [Kullanıcı Etkileşimleri](#kullanıcı-etkileşimleri)
-10. [Test Stratejileri ve Süreçleri](#test-stratejileri-ve-süreçleri)
+10. [Test Süreçleri](#test-süreçleri)
 11. [Dağıtım ve Yayına Alma](#dağıtım-ve-yayına-alma)
 12. [Sorun Giderme ve Destek](#sorun-giderme-ve-destek)
 13. [Katkıda Bulunanlar ve İletişim](#katkıda-bulunanlar-ve-iletişim)
