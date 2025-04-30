@@ -153,11 +153,10 @@ Proje, MVC (Model-View-Controller) mimarisine benzer şekilde katmanlı bir yap�
 
 5. **Uygulamayı Başlatın:**
 
-   ```bash
-   flask run
-   ```
-
-   Sunucu, varsayılan olarak `http://127.0.0.1:5000` adresinde çalışacaktır.
+   Üretim ortamında çalıştırmak için:
+         waitress-serve --listen=0.0.0.0:8000 app:app
+   
+   Not: Windows ortamında gunicorn desteklenmez. Bu nedenle üretim ortamında Windows kullanıcılarının waitress kullanması önerilir.
 
 ---
 
