@@ -296,7 +296,6 @@ doviz_takip/
    - run.py çalıştırarak web sitesinde http://localhost:8000 girerek çalıştırabilirsiniz
   
 - **Üretim Ortamı:**  
-  - `FLASK_ENV=production` ayarı, performans iyileştirmeleri ve hata yönetimi için kullanılır.
   - Gunicorn, uWSGI veya benzeri bir WSGI server ile deploy edilebilir.
 
 ### Docker ile Konteynerleştirme (Opsiyonel)
