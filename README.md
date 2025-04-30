@@ -311,9 +311,8 @@ doviz_takip/
 
 ## Dağıtım ve Yayına Alma
 
-### Yerel ve Üretim Ortamları
-- **Yerel Ortam:**  
-  - Geliştirme esnasında `FLASK_ENV=development` ile hata ayıklama detaylı tutulur.
+### Kullanma
+   - run.py çalıştırarak web sitesinde http://localhost:8000 girerek çalıştırabilirsiniz
   
 - **Üretim Ortamı:**  
   - `FLASK_ENV=production` ayarı, performans iyileştirmeleri ve hata yönetimi için kullanılır.
