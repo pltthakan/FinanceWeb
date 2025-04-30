@@ -155,6 +155,8 @@ Proje, MVC (Model-View-Controller) mimarisine benzer şekilde katmanlı bir yap�
 
    Üretim ortamında çalıştırmak için:
          waitress-serve --listen=0.0.0.0:8000 app:app
+
+   Uygulama, http://localhost:8000 adresinde çalışacaktır.
    
    Not: Windows ortamında gunicorn desteklenmez. Bu nedenle üretim ortamında Windows kullanıcılarının waitress kullanması önerilir.
 
