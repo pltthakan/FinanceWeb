@@ -251,26 +251,6 @@ doviz_takip/
   - API anahtarının kullanılmasıyla düzenli aralıklarla veri çekilir.
   - JSON formatında yanıt alınır, daha sonra veri modellerine göre işlenir.
   
-- **Kod Örneği:**
-
-  ```python
-  import requests
-  import os
-
-  API_KEY = os.getenv("API_KEY")
-  BASE_URL = "https://api.exchangerate-api.com/v4/latest/USD"
-
-  def get_exchange_rates():
-      try:
-          response = requests.get(BASE_URL, params={"apikey": API_KEY}, timeout=5)
-          response.raise_for_status()
-          data = response.json()
-          return data.get('rates', {})
-      except requests.RequestException as e:
-          # Hata loglanabilir veya kullanıcıya uygun mesaj gösterilebilir
-          print(f"API isteğinde hata oluştu: {e}")
-          return {}
-  ```
 
 ### Veri İşleme ve Hata Yönetimi
 - **İş Akışı:**  
