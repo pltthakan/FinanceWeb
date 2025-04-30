@@ -52,7 +52,7 @@
 - **Kullanıcı Deneyimi:** Kullanıcı dostu arayüz ve akıcı etkileşimlerle yüksek kullanılabilirlik sağlamak.
 
 ### Kapsam
-- **Veri Kaynağı:** Dış API (ExchangeRate API veya benzeri) aracılığıyla gerçek zamanlı veri çekimi.
+- **Veri Kaynağı:** Dış API (Yahoo Finance) aracılığıyla gerçek zamanlı veri çekimi.
 - **Kullanıcı Arayüzü:** Basit ama etkili bir web arayüzü.
 - **Sunucu Tarafı İşlemleri:** Python/Flask tabanlı backend sistemi.
 - **Veri Depolama:** SQLite veya alternatif veritabanı çözümleri.
@@ -383,7 +383,7 @@ Geliştirme planları, kullanıcı geri bildirimleri ve proje geliştiricilerini
 - **Python Requests Kütüphanesi:** [Requests Documentation](https://docs.python-requests.org)
 - **Jinja2 Şablon Motoru:** [Jinja2 Documentation](https://jinja.palletsprojects.com)
 - **API Servisleri:**  
-  - [ExchangeRate API](https://www.exchangerate-api.com) (veya kullandığınız servisin dökümantasyonu)
+  - Yahoo Finance
   
 ---
 
