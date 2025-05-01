@@ -361,8 +361,6 @@ Proje ile ilgili öneri, hata bildirimi veya katkıda bulunmak isteyenler GitHub
 - Üçüncü parti ödeme entegrasyonları veya premium özellikler.
 - Ek güvenlik önlemleri (örneğin, rate limiting, CSRF korumaları).
 
-Geliştirme planları, kullanıcı geri bildirimleri ve proje geliştiricilerinin toplantıları sonucunda güncellenecektir.
-
 ---
 
 ## Ek Bilgiler ve Kaynaklar
