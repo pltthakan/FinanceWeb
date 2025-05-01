@@ -27,7 +27,7 @@
 
 ## Giriş
 
-**Döviz Takip Uygulaması**, güncel döviz kurlarını takip etmek, geçmiş verileri analiz etmek ve belirli kurlar için alarm ve bildirim mekanizmaları sunmak üzere tasarlanmış bir web uygulamasıdır. Bu dökümantasyon, projenin iç işleyişine dair tüm detayları açıklamakta, kurulumu, kullanımını ve geliştirilebilecek noktaları kapsamaktadır.
+**Döviz Takip Uygulaması**, güncel döviz kurlarını takip etmek, geçmiş verileri grafiksel olarak incelemek ve sosyal ag ozellikli bir web uygulamasıdır. Bu dökümantasyon, projenin iç işleyişine dair tüm detayları açıklamakta, kurulumu, kullanımını ve geliştirilebilecek noktaları kapsamaktadır.
 
 ---
 
