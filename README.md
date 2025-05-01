@@ -35,7 +35,7 @@
 
 ### Amaç
 - **Güncel Bilgi:** Kullanıcılara en güncel döviz kurlarını sunmak.
-- **Alarm Sistemi:** Kullanıcı tarafından belirlenen eşik değerlerin aşılması durumunda görsel bildirim sağlamak.
+- **Düşüş ve Artışları takip edebilecek arayüz:** düşüş ve yükseliş sembolleri ile takip
 - **Veri Analizi:** Geçmiş döviz verilerinin grafiksel görselleştirmesiyle trend analizi yapabilmek.
 - **Kullanıcı Deneyimi:** Kullanıcı dostu arayüz ve akıcı etkileşimlerle yüksek kullanılabilirlik sağlamak.
 
