@@ -237,13 +237,13 @@ doviz_takip/
 - **Amaç:**  
   - Güncel döviz kurlarının alınması.
 - **Çalışma Prensibi:**  
-  - API anahtarının kullanılmasıyla düzenli aralıklarla veri çekilir.
+  -  Yahoo Finance API kullanılmasıyla düzenli aralıklarla veri çekilir.
   - JSON formatında yanıt alınır, daha sonra veri modellerine göre işlenir.
   
 
 ### Veri İşleme ve Hata Yönetimi
 - **İş Akışı:**  
-  - API’den dönen veriler, `get_exchange_rates()` fonksiyonu ile çekilir.
+  - Yahoo Finance API’den dönen veriler, `get_exchange_rates()` fonksiyonu ile çekilir.
   - JSON verisi ayrıştırılır ve uygulama içindeki veri modellerine aktarılır.
   - Hata durumunda loglama ve yeniden deneme mekanizmaları devreye girer.
   
@@ -371,7 +371,7 @@ Geliştirme planları, kullanıcı geri bildirimleri ve proje geliştiricilerini
 - **Python Requests Kütüphanesi:** [Requests Documentation](https://docs.python-requests.org)
 - **Jinja2 Şablon Motoru:** [Jinja2 Documentation](https://jinja.palletsprojects.com)
 - **API Servisleri:**  
-  - Yahoo Finance
+  - Yahoo Finance,Crypto Panic API
   
 ---
 
