@@ -36,8 +36,9 @@
 ### Amaç
 - **Güncel Bilgi:** Kullanıcılara en güncel döviz kurlarını sunmak.
 - **Düşüş ve Artışları takip edebilecek arayüz:** düşüş ve yükseliş sembolleri ile takip
-- **Veri Analizi:** Geçmiş döviz verilerinin grafiksel görselleştirmesiyle trend analizi yapabilmek.
+- **Grafik:** günlük,haftalık,aylık,yıllık fiyat değişimlerini görebilme
 - **Kullanıcı Deneyimi:** Kullanıcı dostu arayüz ve akıcı etkileşimlerle yüksek kullanılabilirlik sağlamak.
+- **Sosyal Ağ Özellikli:** sosyal medya işlevlerini (takip, yorum, profil) finans verileriyle birleştirir. Böylece kullanıcılar hem piyasa verilerini izleyebilir hem de toplulukla etkileşime geçebilir. 
 
 ### Kapsam
 - **Veri Kaynağı:** Dış API (Yahoo Finance) aracılığıyla gerçek zamanlı veri çekimi.
