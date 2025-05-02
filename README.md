@@ -202,6 +202,7 @@ doviz_takip/
 - **app/templates/**  HTML şablonları; base.html üzerinden kalıtım (template inheritance) ile diğer sayfalar (login.html, register.html, converter.html, news.html vb.) oluşturuluyor.
 
 - **app/routes/**
+  
       auth.py → Kullanıcı kaydı, girişi, çıkışı ve oturum yönetimi ile ilgili route’lar (Blueprint).
 
       comments.py → Varlıklar (döviz, kripto, vs.) veya yazılar altına kullanıcı yorumu ekleme, listeleme, silme/güncelleme işlemleri.
