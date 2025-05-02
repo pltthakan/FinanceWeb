@@ -196,6 +196,19 @@ doviz_takip/
 - **app/utils.py:**  
   - döviz kurları, kripto paralar, altın/gümüş fiyatları, BIST 100 endeksi ve piyasa haberlerini almak için yazılmış yardımcı fonksiyonlardır.
   - Veriler genellikle yfinance veya bir API üzerinden çekilir ve web uygulamasında kullanılmak üzere işlenir.
+ 
+- **app/static/** Tüm şablonlarda kullanılan JavaScript ve stil tanımlamaları.
+
+- **app/templates/**  HTML şablonları; base.html üzerinden kalıtım (template inheritance) ile diğer sayfalar (login.html, register.html, converter.html, news.html vb.) oluşturuluyor.
+
+- **app/routes/**
+      auth.py → Kullanıcı kaydı, girişi, çıkışı ve oturum yönetimi ile ilgili route’lar (Blueprint).
+
+      comments.py → Varlıklar (döviz, kripto, vs.) veya yazılar altına kullanıcı yorumu ekleme, listeleme, silme/güncelleme işlemleri.
+
+      main.py → Ana sayfa (index), haberler, döviz/kripto dönüştürücü, analiz sayfası vb. genel halka açık sayfaların route’ları.
+
+      profile.py → Kullanıcının profilini görüntüleme ve düzenleme route’ları.
   
 - **test/**  
   - Bu kodlar, Selenium kullanılarak geliştirilen bir Flask tabanlı finans web uygulamasının otomatik testlerini yapar.
