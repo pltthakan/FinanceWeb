@@ -92,7 +92,7 @@ Proje, MVC (Model-View-Controller) mimarisine benzer şekilde katmanlı bir yap�
 
 ### Gereksinimler
 
-- Python 3.8 veya daha üst sürüm
+- Python 3.1 veya daha üst sürüm
 - Git
 - [Pipenv veya virtualenv](https://packaging.python.org/en/latest/guides/tool-recommendations/) (tercihe bağlı)
 
