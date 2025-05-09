@@ -27,7 +27,7 @@
 
 ## Giriş
 
-**Finans Takip Uygulaması**, güncel döviz kurlarını takip etmek, geçmiş verileri grafiksel olarak incelemek ve sosyal ag ozellikli bir web uygulamasıdır. Bu dökümantasyon, projenin iç işleyişine dair tüm detayları açıklamakta, kurulumu, kullanımını ve geliştirilebilecek noktaları kapsamaktadır.
+**Finans Takip Uygulaması**, güncel finans kurlarını takip etmek, geçmiş verileri grafiksel olarak incelemek ve sosyal ag ozellikli bir web uygulamasıdır. Bu dökümantasyon, projenin iç işleyişine dair tüm detayları açıklamakta, kurulumu, kullanımını ve geliştirilebilecek noktaları kapsamaktadır.
 
 ---
 
