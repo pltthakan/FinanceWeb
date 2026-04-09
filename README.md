@@ -1,159 +1,180 @@
+# Finance Tracking Application
 
+## Table of Contents
 
----
-
-# Finans Takip Uygulaması 
-
-## İçindekiler
-
-1. [Giriş](#giriş)
-2. [Projenin Amacı ve Kapsamı](#projenin-amacı-ve-kapsamı)
-3. [Mimari ve Sistem Tasarımı](#mimari-ve-sistem-tasarımı)
-4. [Kullanılan Teknolojiler](#kullanılan-teknolojiler)
-5. [Kurulum ve Çalıştırma](#kurulum-ve-çalıştırma)
-6. [Dosya Yapısı ve Modüller](#dosya-yapısı-ve-modüller)
-7. [Kullanım Senaryoları ve Özellikler](#kullanım-senaryoları-ve-özellikler)
-8. [API Entegrasyonu Detayları](#api-entegrasyonu-detayları)
-9. [Kullanıcı Arayüzü ve İş Akışları](#kullanıcı-arayüzü-ve-iş-akışları)
-10. [Test Süreçleri](#test-süreçleri)
-11. [Dağıtım ve Yayına Alma](#dağıtım-ve-yayına-alma)
-12. [Sorun Giderme ve Destek](#sorun-giderme-ve-destek)
-13. [Katkıda Bulunanlar ve İletişim](#katkıda-bulunanlar-ve-iletişim)
-14. [Gelecek Planları ve Geliştirme Yol Haritası](#gelecek-planları-ve-geliştirme-yol-haritası)
-15. [Lisans](#lisans)
-16. [Ek Bilgiler ve Kaynaklar](#ek-bilgiler-ve-kaynaklar)
+1. Introduction
+2. Project Purpose & Scope
+3. Architecture & System Design
+4. Technologies Used
+5. Setup & Run
+6. File Structure & Modules
+7. Use Cases & Features
+8. API Integration Details
+9. UI & Workflows
+10. Testing
+11. Deployment
+12. Troubleshooting & Support
+13. Contributors & Contact
+14. Roadmap & Future Improvements
+15. License
+16. Additional Resources
 
 ---
 
-## Giriş
+## Introduction
 
-**Finans Takip Uygulaması**, güncel finans kurlarını takip etmek, geçmiş verileri grafiksel olarak incelemek ve sosyal ag ozellikli bir web uygulamasıdır. Bu dökümantasyon, projenin iç işleyişine dair tüm detayları açıklamakta, kurulumu, kullanımını ve geliştirilebilecek noktaları kapsamaktadır.
+The **Finance Tracking Application** is a web application that allows users to track real-time financial data, analyze historical trends through charts, and interact with a social-network-like system.
 
----
-
-## Projenin Amacı ve Kapsamı
-
-### Amaç
-- **Güncel Bilgi:** Kullanıcılara en güncel döviz kurlarını sunmak.
-- **Düşüş ve Artışları takip edebilecek arayüz:** düşüş ve yükseliş sembolleri ile takip
-- **Grafik:** günlük,haftalık,aylık,yıllık fiyat değişimlerini görebilme
-- **Kullanıcı Deneyimi:** Kullanıcı dostu arayüz ve akıcı etkileşimlerle yüksek kullanılabilirlik sağlamak.
-- **Sosyal Ağ Özellikli:** sosyal medya işlevlerini (takip, yorum, profil) finans verileriyle birleştirir. Böylece kullanıcılar hem piyasa verilerini izleyebilir hem de toplulukla etkileşime geçebilir. 
-
-### Kapsam
-- **Veri Kaynağı:** Dış API (Yahoo Finance) aracılığıyla gerçek zamanlı veri çekimi.
-- **Kullanıcı Arayüzü:** Basit ama etkili bir web arayüzü.
-- **Sunucu Tarafı İşlemleri:** Python/Flask tabanlı backend sistemi.
-- **Veri Depolama:** SQLite veya alternatif veritabanı çözümleri.
-- **Bildirim Mekanizması:** semboller,renk degişimi ve bildirimler fiyat değişimi anlık olarak bildirilir
+This documentation explains the internal workings of the project, installation steps, usage, and potential improvements. 
 
 ---
 
-## Mimari ve Sistem Tasarımı
+## Project Purpose & Scope
 
-### Genel Mimari
-Proje, MVC (Model-View-Controller) mimarisine benzer şekilde katmanlı bir yapıda organize edilmiştir:
+### Purpose
 
-- **Model:** Veri tabanındaki bilgilerin yönetimi ve saklanması (örneğin, kullanıcı tercihleri, geçmiş kurlar).
-- **View (Görünüm):** HTML, CSS, JavaScript ve Jinja2 şablonlarıyla oluşturulan kullanıcı arayüzü.
-- **Controller:** Flask tabanlı uygulama mantığı, URL yönlendirmeleri, API istekleri ve veri işleme işlemleri.
+* **Real-time data:** Provide up-to-date exchange rates
+* **Trend tracking:** Visual indicators for price increases/decreases
+* **Charts:** Daily, weekly, monthly, yearly analysis
+* **User experience:** Simple and user-friendly interface
+* **Social features:** Follow users, comment, and interact with financial data
 
-### Bileşenler
-- **API Entegrasyonu:** Gerçek zamanlı verilerin çekilmesi için harici API çağrıları.
-- **Veri İşleme:** API’den çekilen verilerin işlenmesi ve kullanıcıya sunulmadan önce filtrelenmesi.
-- **Testler:** Her bileşenin hatasız çalışmasını sağlayan birim ve entegrasyon testleri.
+### Scope
 
----
-
-## Kullanılan Teknolojiler
-
-- **Frontend:**
-  - HTML5, CSS3, JavaScript
-  - İleri düzeyde stil yönetimi için Bootstrap veya TailwindCSS
-- **Backend:**
-  - Python 3.x
-  - Flask Framework
-- **Templating:**
-  - Jinja2
-- **Veritabanı:**
-  - SQLite (hafif ve başlangıç için ideal)
-  - Alternatif olarak PostgreSQL/MySQL
-- **API:**
-  - ExchangeRate API , Yohoo Finance
-- **Test Araçları:**
-  - pytest (birim ve entegrasyon testleri)
-- **Diğer Araçlar:**
-  - Git (versiyon kontrol)
-  - Docker (isteğe bağlı, konteynerleştirme için)
+* **Data Source:** External API (Yahoo Finance)
+* **UI:** Simple yet effective web interface
+* **Backend:** Python/Flask-based system
+* **Database:** SQLite (or alternatives)
+* **Notifications:** Visual indicators (color, symbols, alerts) for price changes
 
 ---
 
-## Kurulum ve Çalıştırma
+## Architecture & System Design
 
-### Gereksinimler
+### General Architecture
 
-- Python 3.1 veya daha üst sürüm
-- Git
-- [Pipenv veya virtualenv](https://packaging.python.org/en/latest/guides/tool-recommendations/) (tercihe bağlı)
+The project follows a layered structure similar to MVC (Model-View-Controller):
 
-### Adım Adım Kurulum
+* **Model:** Manages and stores data (user preferences, historical data)
+* **View:** UI built with HTML, CSS, JavaScript, and Jinja2
+* **Controller:** Flask logic, routing, API handling, data processing
 
-1. **Depoyu Klonlayın:**
+### Components
 
-   ```bash
-   git clone https://github.com/Skarled5/FinanceWeb.git
-   cd doviz_takip
-   ```
-
-2. **Sanal Ortam Oluşturun:**
-
-   Tercihe bağlı olarak:
-
-   - **virtualenv Kullanarak:**
-     ```bash
-     python -m venv env
-     source env/bin/activate  # Unix/MacOS
-     env\Scripts\activate     # Windows
-     ```
-
-   - **Pipenv Kullanarak:**
-     ```bash
-     pipenv shell
-     ```
-
-3. **Gerekli Paketleri Yükleyin:**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Ortam Değişkenleri ve Konfigürasyon:**
-
-   Projede, hassas bilgileri saklamak için `.env` dosyası kullanılması önerilir. Örneğin:
-
-   ```dotenv
-   FLASK_APP=app/routes.py
-   FLASK_ENV=development
-   API_KEY=your_exchange_rate_api_key
-   SECRET_KEY=your_secret_key
-   ```
-
-   Uygulama, bu dosyadaki bilgileri yükleyerek çalışır. `.env` dosyasını oluşturmayı unutmayın.
-
-5. **Uygulamayı Başlatın:**
-
-   Üretim ortamında çalıştırmak için:
-         waitress-serve --listen=0.0.0.0:8000 app:app
-
-   Uygulama, http://localhost:8000 adresinde çalışacaktır.
-   
-   Not: Windows ortamında gunicorn desteklenmez. Bu nedenle üretim ortamında Windows kullanıcılarının waitress kullanması önerilir.
+* **API Integration:** Fetches real-time financial data
+* **Data Processing:** Cleans and formats API data
+* **Testing:** Unit and integration tests ensure reliability
 
 ---
 
-## Dosya Yapısı ve Modüller
+## Technologies Used
 
-### Ana Dosya Yapısı
+### Frontend
+
+* HTML5, CSS3, JavaScript
+* Bootstrap or TailwindCSS
+
+### Backend
+
+* Python 3.x
+* Flask
+
+### Templating
+
+* Jinja2
+
+### Database
+
+* SQLite
+* (Optional) PostgreSQL / MySQL
+
+### API
+
+* ExchangeRate API
+* Yahoo Finance
+
+### Testing
+
+* pytest
+
+### Tools
+
+* Git
+* Docker (optional)
+
+---
+
+## Setup & Run
+
+### Requirements
+
+* Python 3.1+
+* Git
+* Pipenv or virtualenv (optional)
+
+### Installation Steps
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/Skarled5/FinanceWeb.git
+cd doviz_takip
+```
+
+2. **Create a virtual environment**
+
+Using virtualenv:
+
+```bash
+python -m venv env
+source env/bin/activate   # macOS/Linux
+env\Scripts\activate      # Windows
+```
+
+Or using Pipenv:
+
+```bash
+pipenv shell
+```
+
+3. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Environment variables**
+
+Create a `.env` file:
+
+```env
+FLASK_APP=app/routes.py
+FLASK_ENV=development
+API_KEY=your_exchange_rate_api_key
+SECRET_KEY=your_secret_key
+```
+
+5. **Run the application**
+
+For production:
+
+```bash
+waitress-serve --listen=0.0.0.0:8000 app:app
+```
+
+Application runs at:
+
+```
+http://localhost:8000
+```
+
+> Note: Gunicorn is not supported on Windows. Use **Waitress** instead.
+
+---
+
+## File Structure & Modules
+
+### Main Structure
 
 ```
 doviz_takip/
@@ -163,151 +184,111 @@ doviz_takip/
 │   ├── config.py          
 │   ├── models.py        
 │   ├── utils.py         
-│   ├── static/          # CSS, JavaScript, resimler vs.
-│   └── templates/       # Jinja2 şablon dosyaları (HTML)
+│   ├── static/          
+│   └── templates/       
 ├── routes/
-│   ├── __init__.py   # 
-│   ├── auth.py    # 
-    ├── main.py #
-    ├── profile.py #
-│   └── comments.py   # 
-├── run.py               # Ortam değişkenleri (örnek dosya: .env.example)
-├── test.py   # Python kütüphanelerinin listesi
-├── Dockerfile         # (Opsiyonel) Uygulama konteynerleştirmesi için
-├── README.md          # Bu dokümantasyon dosyası
+│   ├── auth.py
+│   ├── main.py
+│   ├── profile.py
+│   └── comments.py
+├── run.py
+├── test.py
+├── Dockerfile
+├── README.md
 └── LICENSE
 ```
 
-### Modüllerin Açıklaması
+### Module Descriptions
 
-- **app/\_\_init\_\_.py:**  
-  - Flask uygulamasını yapılandırır.
-  - Veritabanı bağlantısını ve diğer global ayarları başlatır.
-  
-- **app/admin.py:**  
-  - Yönetici paneli oluşturur ve veritabanı modellerini bu panele ekler.
-  
-- **app/config.py:**  
-  - Uygulamanın veritabanı, önbellek ve API bağlantı ayarlarını içerir.
-  
-- **app/models.py:**  
-  - Bu dosya, uygulamanın veritabanı modellerini, admin erişimini, takip/yorum/like sistemini ve admin panelini tanımlar.
-  
-- **app/utils.py:**  
-  - döviz kurları, kripto paralar, altın/gümüş fiyatları, BIST 100 endeksi ve piyasa haberlerini almak için yazılmış yardımcı fonksiyonlardır.
-  - Veriler genellikle yfinance veya bir API üzerinden çekilir ve web uygulamasında kullanılmak üzere işlenir.
- 
-- **app/static/** Tüm şablonlarda kullanılan JavaScript ve stil tanımlamaları.
+* **app/**init**.py:** Initializes Flask app and database
+* **admin.py:** Admin panel setup
+* **config.py:** Configuration settings
+* **models.py:** Database models and social features
+* **utils.py:** Helper functions for financial data
+* **routes/**:
 
-- **app/templates/**  HTML şablonları; base.html üzerinden kalıtım (template inheritance) ile diğer sayfalar (login.html, register.html, converter.html, news.html vb.) oluşturuluyor.
-
-- **app/routes/**
-  
-      auth.py → Kullanıcı kaydı, girişi, çıkışı ve oturum yönetimi ile ilgili route’lar (Blueprint).
-
-      comments.py → Varlıklar (döviz, kripto, vs.) veya yazılar altına kullanıcı yorumu ekleme, listeleme, silme/güncelleme işlemleri.
-
-      main.py → Ana sayfa (index), haberler, döviz/kripto dönüştürücü, analiz sayfası vb. genel halka açık sayfaların route’ları.
-
-      profile.py → Kullanıcının profilini görüntüleme ve düzenleme route’ları.
-  
-- **test/**  
-  - Bu kodlar, Selenium kullanılarak geliştirilen bir Flask tabanlı finans web uygulamasının otomatik testlerini yapar.
-  - Genel olarak:
-      -Sayfa içeriklerinin (ana sayfa, haberler, analiz vs.) doğru yüklendiğini,
-      -Kullanıcı kayıt ve giriş işlemlerinin çalıştığını,
-      -Döviz çeviricinin doğru çalıştığını,
-      -Yorum ekleme ve profil görüntüleme gibi kullanıcı etkileşimlerinin düzgün olduğunu kontrol eder.
+  * `auth.py` → authentication
+  * `main.py` → main pages
+  * `profile.py` → user profile
+  * `comments.py` → comments system
 
 ---
 
-## Kullanım Senaryoları ve Özellikler
+## Use Cases & Features
 
-### 1. Ana Sayfa
-- **Gösterim:**  
-  - Anlık kurlarının listelendiği dinamik bir ekran.
-  - Kullanıcılar, güncel verileri, grafik ve tablolar aracılığıyla izleyebilir.
-  
-- **Özellikler:**  
-  - Otomatik güncelleme: Belirli aralıklarla arka planda API çağrıları yapılarak veriler yenilenir.
+### 1. Homepage
 
-### 2. Canlı Degisim Gösterge
-- **Sembol Degişimi:**  
-  - Artış durumunda yeşil ok azalış durumunda kırmızı ok ile gösterilir
-  
-### 3. Grafiksel Veri Görselleştirme
-- **Analiz Araçları:**  
-  - Geçmiş verilerin çizgi grafik, bar grafik gibi görsel analizleri.
-  - Tarih aralığı seçimi ve detaylı inceleme imkanı.
-  
-- **Etkileşim:**  
-  - Grafiklere yakınlaştırma, veri noktalarını detaylı görüntüleme.
+* Displays real-time financial data
+* Auto-refreshes via API
+
+### 2. Live Change Indicator
+
+* Green arrow → increase
+* Red arrow → decrease
+
+### 3. Data Visualization
+
+* Line and bar charts
+* Date range selection
+* Interactive graphs
 
 ---
 
-## API Entegrasyonu Detayları
+## API Integration Details
 
-### Dış Veri Kaynağı (ExchangeRate API)
-- **Amaç:**  
-  - Güncel döviz kurlarının alınması.
-- **Çalışma Prensibi:**  
-  -  Yahoo Finance API kullanılmasıyla düzenli aralıklarla veri çekilir.
-  - JSON formatında yanıt alınır, daha sonra veri modellerine göre işlenir.
-  
+### External Data Source
 
-### Veri İşleme ve Hata Yönetimi
-- **İş Akışı:**  
-  - Yahoo Finance API’den dönen veriler, `get_exchange_rates()` fonksiyonu ile çekilir.
-  - JSON verisi ayrıştırılır ve uygulama içindeki veri modellerine aktarılır.
-  - Hata durumunda loglama ve yeniden deneme mekanizmaları devreye girer.
-  
-- **Hata Yönetimi:**  
-  - Timeout, bağlantı kopukluğu ve beklenmeyen veri formatı durumlarında uygun hata mesajları üretilir.
-  - Kullanıcının uygulamayı kesintisiz kullanabilmesi için fallback mekanizmaları devreye alınır.
+* Uses Yahoo Finance API
+* Data retrieved periodically
+
+### Data Processing
+
+* JSON parsing
+* Data transformation into models
+* Error handling (timeouts, invalid data, retries)
 
 ---
 
-## Kullanıcı Arayüzü ve İş Akışları
+## UI & Workflows
 
-### Ana Sayfa ve Veri Görselleştirme
-- **Şablonlar:**  
-  - Ana sayfa için `templates/index.html` şablonu kullanılır.
-  - Jinja2 sözdizimi ile dinamik içerik yerleştirilir.
-  
-- **İş Akışı:**  
-  - Kullanıcı ana sayfaya geldiğinde, backend `routes` içerisindeki ilgili fonksiyon çağrılır.
-  - API’den çekilen veriler HTML içerisinde dinamik olarak sunulur.
-  - Grafikler için JavaScript kütüphaneleri (örneğin, Chart.js) entegre edilebilir.
+### Homepage
 
+* Uses `templates/index.html`
+* Dynamic rendering with Jinja2
 
-### Kullanıcı Etkileşimleri
-- **Dinamik Formlar:**  
-  - Döviz çiftleri ekleme, alarm düzenleme ve filtreleme seçenekleri form tabanlı olarak sağlanır.
-  - JavaScript ile sayfa dinamikleştirilir ve AJAX çağrıları yapılabilir.
+### User Interactions
+
+* Forms for currency conversion and alerts
+* AJAX-based dynamic updates
 
 ---
 
-## Test Süreçleri
+## Testing
 
-![Ekran görüntüsü 2025-04-16 114202](https://github.com/user-attachments/assets/e543c239-313d-4138-8094-7b3b988ef6fa)
+* Selenium-based automated tests
+* Validates:
+
+  * Page loads
+  * Authentication
+  * Currency conversion
+  * Comments and profile features
 
 ---
 
-## Dağıtım ve Yayına Alma
+## Deployment
 
-### Kullanma
-   - run.py çalıştırarak web sitesinde http://localhost:8000 girerek çalıştırabilirsiniz
-  
-- **Üretim Ortamı:**  
-  - Gunicorn, uWSGI veya benzeri bir WSGI server ile deploy edilebilir.
+### Running
 
-### Docker ile Konteynerleştirme (Opsiyonel)
-- **Dockerfile:**  
-  - Uygulamanın containerize edilmesi için Dockerfile hazırlanabilir.
-- **Docker Compose:**  
-  - Veri tabanı ve uygulamanın beraber çalışması için docker-compose.yml dosyası oluşturulabilir.
+* Run via `run.py`
+* Access via `http://localhost:8000`
 
-Örnek Dockerfile:
+### Production
+
+* Use Gunicorn / uWSGI
+
+### Docker (Optional)
+
+Example Dockerfile:
 
 ```dockerfile
 FROM python:3.9-slim
@@ -329,64 +310,49 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 
 ---
 
-## Sorun Giderme ve Destek
+## Troubleshooting & Support
 
-### Yaygın Sorunlar
-- **API Bağlantı Hataları:**  
-  - API anahtarının doğruluğunu kontrol edin.
-  - İnternet bağlantısını ve API hizmetinin durumunu kontrol edin.
-  
-- **Veritabanı Bağlantısı:**  
-  - Veritabanı dosyasının veya bağlantı ayarlarının doğru yapılandırıldığından emin olun.
-  
-- **Ortam Değişkenleri:**  
-  - `.env` dosyasındaki değişkenlerin doğru tanımlandığını kontrol edin.
-  
-- **Sunucu Hataları:**  
-  - Flask log dosyalarını inceleyerek hangi hataların tetiklendiğini belirleyin.
+### Common Issues
 
-### Destek ve İletişim
-- **GitHub Issues:**  
-  - Projenin GitHub deposunda issue açarak veya tartışma bölümünde soru sorabilirsiniz.
-- **E-posta:**  
-  - Destek için [hakankocaeli15@gmail.com] adresine yazabilirsiniz .
+* **API errors:** Check API key and connection
+* **Database issues:** Verify configuration
+* **Environment variables:** Ensure `.env` is correct
+* **Server errors:** Check Flask logs
+
+### Support
+
+* GitHub Issues
+* Email: [hakankocaeli15@gmail.com](mailto:hakankocaeli15@gmail.com)
 
 ---
 
-## Katkıda Bulunanlar ve İletişim
+## Contributors
 
-- **Proje Sahibi:**  
-  - [Hakan Polat] 
-
-Proje ile ilgili öneri, hata bildirimi veya katkıda bulunmak isteyenler GitHub üzerinden pull request gönderebilir veya direkt iletişim kurabilir.
+* **Hakan Polat**
 
 ---
 
-## Gelecek Planları ve Geliştirme Yol Haritası
+## Roadmap & Future Improvements
 
-### Kısa Vadeli Hedefler
-- Kullanıcı doğrulama ve oturum yönetimi eklenmesi.
-- Gelişmiş grafik ve veri görselleştirme entegrasyonu (örneğin, Chart.js veya D3.js).
-- Mobil cihazlar için responsive tasarım iyileştirmeleri.
+### Short-Term
 
-### Uzun Vadeli Hedefler
-- Gerçek zamanlı güncellemeler için WebSocket entegrasyonu.
-- Çoklu dil desteği ve uluslararasılaştırma (i18n).
-- Üçüncü parti ödeme entegrasyonları veya premium özellikler.
-- Ek güvenlik önlemleri (örneğin, rate limiting, CSRF korumaları).
+* Add authentication system
+* Improve charts (Chart.js / D3.js)
+* Enhance mobile responsiveness
+
+### Long-Term
+
+* WebSocket for real-time updates
+* Multi-language support (i18n)
+* Payment integration / premium features
+* Advanced security (rate limiting, CSRF protection)
 
 ---
 
-## Ek Bilgiler ve Kaynaklar
+## Additional Resources
 
-- **Resmi Flask Dokümantasyonu:** [Flask Documentation](https://flask.palletsprojects.com)
-- **Python Requests Kütüphanesi:** [Requests Documentation](https://docs.python-requests.org)
-- **Jinja2 Şablon Motoru:** [Jinja2 Documentation](https://jinja.palletsprojects.com)
-- **API Servisleri:**  
-  - Yahoo Finance,Crypto Panic API
-  
----
-
-
-
-
+* Flask Documentation
+* Requests Library
+* Jinja2
+* Yahoo Finance API
+* Crypto Panic API
