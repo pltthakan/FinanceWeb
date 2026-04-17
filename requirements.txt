@@ -1,0 +1,12 @@
+flask
+flask-sqlalchemy
+flask-admin
+flask-caching
+flask-migrate
+yfinance
+requests
+feedparser
+numpy
+gunicorn
+python-dotenv
+waitress

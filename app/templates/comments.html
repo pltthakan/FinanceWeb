@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Yorumlar{% endblock %}
+{% block content %}
+<h1>Yorumlar</h1>
+
+{% if session.get('user_id') %}
+  <!-- Yeni yorum ekleme formu -->
+  <form action="{{ url_for('add_comment') }}" method="post">
+    <div class="mb-3">
+      <textarea name="comment" rows="3" class="form-control" placeholder="Yorumunuzu yazın..."></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Yorum Gönder</button>
+  </form>
+{% else %}
+  <p>Yorum yapabilmek için <a href="{{ url_for('login') }}">giriş yapmalısınız</a>.</p>
+{% endif %}
+
+<hr>
+
+<!-- Yorumların listelenmesi -->
+{% for comment in comments %}
+<div class="card mb-3">
+  <div class="card-body">
+    <p>
+      <strong>
+        <a href="{{ url_for('profile', username=comment.author.username) }}">
+          {{ comment.author.username }}
+        </a>
+      </strong>
+      {% if current_user and current_user.is_following(comment.author) %}
+        <span class="badge bg-info text-dark">Takip Ediliyor</span>
+      {% endif %}
+       - {{ comment.timestamp.strftime("%d/%m/%Y %H:%M") }}
+    </p>
+    <p>{{ comment.content }}</p>
+    <p>
+      <form action="{{ url_for('like_comment', comment_id=comment.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-success">Like ({{ comment.like_count }})</button>
+      </form>
+      <form action="{{ url_for('dislike_comment', comment_id=comment.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-danger">Dislike ({{ comment.dislike_count }})</button>
+      </form>
+      {% if comment.user_id == session.get('user_id') %}
+      <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-warning">Sil</button>
+      </form>
+      {% endif %}
+      <!-- Alt yorumları aç/kapa butonu -->
+      <button type="button" class="btn btn-sm btn-info" data-bs-toggle="collapse" data-bs-target="#replies{{ comment.id }}" aria-expanded="false" aria-controls="replies{{ comment.id }}">
+        <i class="bi bi-chat"></i>
+      </button>
+    </p>
+    <!-- Cevap verme butonu -->
+    {% if session.get('user_id') %}
+    <button class="btn btn-sm btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#replyForm{{ comment.id }}">
+      Cevapla
+    </button>
+    <div class="collapse" id="replyForm{{ comment.id }}">
+      <form action="{{ url_for('add_comment') }}" method="post">
+        <div class="mb-2">
+          <textarea name="comment" class="form-control" rows="2" placeholder="Cevabınızı yazın..."></textarea>
+        </div>
+        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <button type="submit" class="btn btn-primary btn-sm">Gönder</button>
+      </form>
+    </div>
+    {% endif %}
+    <!-- Alt yorumların listelenmesi (Collapse içine alındı) -->
+    <div class="collapse" id="replies{{ comment.id }}">
+      {% for reply in comment.replies.order_by(Comment.timestamp.asc()).all() %}
+      <div class="card mt-3 ms-5">
+        <div class="card-body">
+          <p>
+            <strong>
+              <a href="{{ url_for('profile', username=reply.author.username) }}">
+                {{ reply.author.username }}
+              </a>
+            </strong>
+            {% if current_user and current_user.is_following(reply.author) %}
+              <span class="badge bg-info text-dark">Takip Ediliyor</span>
+            {% endif %}
+             - {{ reply.timestamp.strftime("%d/%m/%Y %H:%M") }}
+          </p>
+          <p>{{ reply.content }}</p>
+          <p>
+            <form action="{{ url_for('like_comment', comment_id=reply.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-success">Like ({{ reply.like_count }})</button>
+            </form>
+            <form action="{{ url_for('dislike_comment', comment_id=reply.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-danger">Dislike ({{ reply.dislike_count }})</button>
+            </form>
+            {% if reply.user_id == session.get('user_id') %}
+            <form action="{{ url_for('delete_comment', comment_id=reply.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-warning">Sil</button>
+            </form>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

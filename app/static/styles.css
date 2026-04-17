@@ -1,0 +1,240 @@
+/* Genel ayarlar */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  color: #333;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Particles.js arka planı */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #2575fc; /* Arka plan rengi, isterseniz gradient ile de değiştirebilirsiniz */
+}
+
+/* Canlı Kur Bilgileri Üst Barı */
+.live-bar {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+.live-bar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.live-bar .rate-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.live-bar .rate-group-left {
+  flex: 1 1 58%;
+}
+
+.live-bar .rate-group-right {
+  flex: 1 1 38%;
+  justify-content: flex-end;
+}
+
+.live-bar .rate-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.live-bar .rate-item:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.rate-value {
+  margin-left: 4px;
+  font-weight: 600;
+}
+
+.rate-indicator {
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.rate-indicator.green {
+  color: #00d68f;
+}
+
+.rate-indicator.red {
+  color: #ff3d71;
+}
+
+.rate-indicator.neutral {
+  color: #aaa;
+}
+
+/* Navigasyon */
+.nav-fun {
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.nav-fun .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: transform 0.3s ease;
+}
+
+.nav-fun .navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.nav-fun .nav-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-fun .nav-link:hover {
+  color: #ffd700;
+}
+
+/* İçerik alanı */
+.content-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 20px;
+}
+
+/* Kartlar ve uyarılar */
+.card, .alert {
+  border-radius: 10px;
+}
+
+/* Animasyon örnekleri */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.rate-indicator.green,
+.rate-indicator.red {
+  animation: pulse 1s infinite;
+}
+
+/* Profil ve diğer içerik alanları */
+.profile-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+}
+
+.profile-fallback {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-info h2 {
+  margin: 0;
+}
+
+.profile-stats a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.profile-stats a:hover {
+  text-decoration: underline;
+}
+
+/* Collapse içeriği ve yorum kartları */
+.card.card-body {
+  background-color: #f8f9fa;
+}
+
+.profile-comments .card {
+  margin-bottom: 15px;
+}
+
+
+@media (max-width: 992px) {
+  .live-bar-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .live-bar .rate-group-right {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 576px) {
+  .live-bar {
+    padding: 10px 0;
+  }
+
+  .live-bar .rate-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

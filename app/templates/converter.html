@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Döviz Dönüştürücü{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header bg-secondary text-white">
+    Döviz Dönüştürücü
+  </div>
+  <div class="card-body">
+    <form action="{{ url_for('converter') }}" method="post">
+      <div class="mb-3">
+        <label for="amount" class="form-label">Miktar:</label>
+        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="from_currency" class="form-label">Dönüştürülecek Para Birimi:</label>
+        <select name="from_currency" id="from_currency" class="form-select" required>
+          {% for currency in exchange_rates.keys() %}
+            <option value="{{ currency }}">{{ currency }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="to_currency" class="form-label">Hedef Para Birimi:</label>
+        <select name="to_currency" id="to_currency" class="form-select" required>
+          {% for currency in exchange_rates.keys() %}
+            <option value="{{ currency }}">{{ currency }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Dönüştür</button>
+    </form>
+    {% if result is not none %}
+      <div class="alert alert-info mt-3">
+        <h4 class="alert-heading">Sonuç: {{ result }}</h4>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
