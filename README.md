@@ -1,4 +1,3 @@
-````md
 # Finance Tracking Application
 
 ## Table of Contents
@@ -455,5 +454,5 @@ Docker setup can be extended to support:
 * React Router Documentation
 * Financial API provider documentation
 
-```
+
 
