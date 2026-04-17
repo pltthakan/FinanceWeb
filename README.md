@@ -1,3 +1,8 @@
+Tabii. Bu dokümanda hâlâ eski yapı yazıyor; özellikle **Jinja2 tabanlı view katmanı**, **tam sayfa yenileme mantığı** ve eski klasör yapısı güncellenmeli. Mevcut metinde frontend’in HTML/CSS/JS + Jinja2 olduğu ve sayfaların template üzerinden render edildiği yazıyor.  
+
+Aşağıya direkt yapıştırabileceğin güncel sürümü bırakıyorum:
+
+````md
 # Finance Tracking Application
 
 ## Table of Contents
@@ -23,9 +28,14 @@
 
 ## Introduction
 
-The **Finance Tracking Application** is a web application that allows users to track real-time financial data, analyze historical trends through charts, and interact with a social-network-like system.
+The **Finance Tracking Application** is a modern web application that allows users to track real-time financial data, analyze historical trends through charts, and interact with finance-related content through social features.
 
-This documentation explains the internal workings of the project, installation steps, usage, and potential improvements. 
+The project has been restructured from a traditional Flask + Jinja multi-page application into a **React-based Single Page Application (SPA)** architecture. This change improves perceived performance, enables faster page transitions, and creates a more modern and responsive user experience.
+
+The backend remains Flask-based and is now primarily responsible for serving **REST-style API endpoints**, authentication logic, and data access.
+
+<img width="1470" height="956" alt="Ekran Resmi 2026-04-17 23 25 10" src="https://github.com/user-attachments/assets/59949f84-31ff-435f-ba34-aac4a28fe054" />
+
 
 ---
 
@@ -33,19 +43,21 @@ This documentation explains the internal workings of the project, installation s
 
 ### Purpose
 
-* **Real-time data:** Provide up-to-date exchange rates
+* **Real-time data:** Provide up-to-date exchange rates and asset prices
+* **Fast navigation:** Eliminate full page reloads with SPA architecture
 * **Trend tracking:** Visual indicators for price increases/decreases
-* **Charts:** Daily, weekly, monthly, yearly analysis
-* **User experience:** Simple and user-friendly interface
-* **Social features:** Follow users, comment, and interact with financial data
+* **Charts:** Daily, weekly, monthly, and yearly analysis
+* **Shared live state:** Reuse fetched live data across multiple pages without unnecessary repeated requests
+* **User experience:** Cleaner, smoother, and more responsive interface
+* **Social features:** Support user interaction, comments, and profile-based features
 
 ### Scope
 
-* **Data Source:** External API (Yahoo Finance)
-* **UI:** Simple yet effective web interface
-* **Backend:** Python/Flask-based system
-* **Database:** SQLite (or alternatives)
-* **Notifications:** Visual indicators (color, symbols, alerts) for price changes
+* **Frontend:** React + Vite + React Router
+* **Backend:** Python + Flask API service
+* **Database:** SQLite (can be extended later)
+* **Data Source:** External financial APIs
+* **UI Goal:** Lightweight, responsive, and navigation-friendly financial dashboard
 
 ---
 
@@ -53,17 +65,35 @@ This documentation explains the internal workings of the project, installation s
 
 ### General Architecture
 
-The project follows a layered structure similar to MVC (Model-View-Controller):
+The project now follows a **frontend-backend separated architecture**:
 
-* **Model:** Manages and stores data (user preferences, historical data)
-* **View:** UI built with HTML, CSS, JavaScript, and Jinja2
-* **Controller:** Flask logic, routing, API handling, data processing
+* **Frontend (React SPA):** Responsible for rendering pages, routing, top bar, and client-side interactions
+* **Backend (Flask API):** Provides financial data, historical data, authentication-related operations, and business logic
+* **Shared State Layer:** Centralized client-side live data management using a context-based structure
+
+This architecture removes the traditional server-rendered page flow and replaces it with a client-rendered interface that communicates with the backend through API calls.
 
 ### Components
 
-* **API Integration:** Fetches real-time financial data
-* **Data Processing:** Cleans and formats API data
-* **Testing:** Unit and integration tests ensure reliability
+* **React SPA Frontend**
+  * Handles page transitions without full reload
+  * Uses React Router for navigation
+  * Improves responsiveness and user experience
+
+* **LiveDataContext**
+  * Centralized state manager for live financial data
+  * Polls backend data periodically (for example every 60 seconds)
+  * Prevents duplicate requests when moving between pages
+  * Ensures top bar and homepage use the same live dataset
+
+* **Flask API Backend**
+  * Serves `/api/*` endpoints
+  * Handles business logic and data processing
+  * Can continue using existing backend logic with minimal disruption
+
+* **Historical Chart Services**
+  * Provides chart data for selected assets and time ranges
+  * Used by analysis and asset detail pages
 
 ---
 
@@ -71,36 +101,40 @@ The project follows a layered structure similar to MVC (Model-View-Controller):
 
 ### Frontend
 
-* HTML5, CSS3, JavaScript
-* Bootstrap or TailwindCSS
+* React
+* Vite
+* React Router
+* JavaScript
+* CSS3
 
 ### Backend
 
 * Python 3.x
 * Flask
 
-### Templating
+### State Management
 
-* Jinja2
+* React Context API
 
 ### Database
 
 * SQLite
-* (Optional) PostgreSQL / MySQL
 
 ### API
 
-* ExchangeRate API
-* Yahoo Finance
+* Financial data APIs
+* Historical asset data APIs
 
 ### Testing
 
 * pytest
+* Frontend component/page testing can be extended later
 
 ### Tools
 
 * Git
-* Docker (optional)
+* Docker
+* npm
 
 ---
 
@@ -108,67 +142,63 @@ The project follows a layered structure similar to MVC (Model-View-Controller):
 
 ### Requirements
 
-* Python 3.1+
+* Python 3.10+
+* Node.js 18+
+* npm
 * Git
-* Pipenv or virtualenv (optional)
 
 ### Installation Steps
 
-1. **Clone the repository**
+#### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Skarled5/FinanceWeb.git
-cd doviz_takip
-```
+git clone https://github.com/pltthakan/FinanceWeb.git
+cd FinanceWeb
+````
 
-2. **Create a virtual environment**
-
-Using virtualenv:
+#### 2. Backend setup
 
 ```bash
 python -m venv env
 source env/bin/activate   # macOS/Linux
-env\Scripts\activate      # Windows
-```
-
-Or using Pipenv:
-
-```bash
-pipenv shell
-```
-
-3. **Install dependencies**
-
-```bash
 pip install -r requirements.txt
+python run.py
 ```
 
-4. **Environment variables**
+Backend runs by default on:
 
-Create a `.env` file:
-
-```env
-FLASK_APP=app/routes.py
-FLASK_ENV=development
-API_KEY=your_exchange_rate_api_key
-SECRET_KEY=your_secret_key
+```text
+http://localhost:5000
 ```
 
-5. **Run the application**
-
-For production:
+#### 3. Frontend setup
 
 ```bash
-waitress-serve --listen=0.0.0.0:8000 app:app
+cd finance-react
+npm install
+npm run dev
 ```
 
-Application runs at:
+Frontend runs by default on:
 
-```
-http://localhost:8000
+```text
+http://localhost:5173
 ```
 
-> Note: Gunicorn is not supported on Windows. Use **Waitress** instead.
+### Frontend Proxy
+
+To simplify development, Vite can proxy API requests to Flask:
+
+```js
+server: {
+  proxy: {
+    '/api': 'http://localhost:5000',
+    '/asset': 'http://localhost:5000'
+  }
+}
+```
+
+This allows the React frontend to call backend endpoints without manual CORS handling during development.
 
 ---
 
@@ -176,41 +206,59 @@ http://localhost:8000
 
 ### Main Structure
 
-```
-doviz_takip/
+```text
+FinanceWeb/
 ├── app/
-│   ├── __init__.py      
-│   ├── admin.py        
-│   ├── config.py          
-│   ├── models.py        
-│   ├── utils.py         
-│   ├── static/          
-│   └── templates/       
-├── routes/
-│   ├── auth.py
-│   ├── main.py
-│   ├── profile.py
-│   └── comments.py
+│   ├── __init__.py
+│   ├── models.py
+│   ├── utils.py
+│   ├── routes/
+│   │   ├── auth.py
+│   │   ├── main.py
+│   │   ├── profile.py
+│   │   └── comments.py
+│   └── static/
+├── finance-react/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── src/
+│       ├── main.jsx
+│       ├── App.jsx
+│       ├── api.js
+│       ├── index.css
+│       ├── context/
+│       │   └── LiveDataContext.jsx
+│       ├── components/
+│       │   ├── Layout.jsx
+│       │   ├── LiveRateBar.jsx
+│       │   ├── Navbar.jsx
+│       │   └── ParticlesBackground.jsx
+│       └── pages/
+│           ├── Home.jsx
+│           ├── Converter.jsx
+│           ├── Analysis.jsx
+│           ├── News.jsx
+│           ├── About.jsx
+│           ├── Comments.jsx
+│           ├── Profile.jsx
+│           ├── Login.jsx
+│           ├── Register.jsx
+│           ├── AssetDetail.jsx
+│           └── NotFound.jsx
 ├── run.py
-├── test.py
+├── requirements.txt
 ├── Dockerfile
-├── README.md
-└── LICENSE
+└── README.md
 ```
 
 ### Module Descriptions
 
-* **app/**init**.py:** Initializes Flask app and database
-* **admin.py:** Admin panel setup
-* **config.py:** Configuration settings
-* **models.py:** Database models and social features
-* **utils.py:** Helper functions for financial data
-* **routes/**:
-
-  * `auth.py` → authentication
-  * `main.py` → main pages
-  * `profile.py` → user profile
-  * `comments.py` → comments system
+* **app/** → Flask backend application
+* **routes/** → API and backend route logic
+* **finance-react/** → React frontend
+* **LiveDataContext.jsx** → shared live market data state
+* **components/** → reusable UI blocks
+* **pages/** → route-level page components
 
 ---
 
@@ -218,95 +266,138 @@ doviz_takip/
 
 ### 1. Homepage
 
-* Displays real-time financial data
-* Auto-refreshes via API
+* Displays live financial data
+* Uses shared live state from the client context
+* Avoids refetching when navigating back from another page
 
-### 2. Live Change Indicator
+### 2. Live Top Bar
 
-* Green arrow → increase
-* Red arrow → decrease
+* Shows financial items in a cleaner horizontal structure
+* Designed to avoid broken wrapping issues
+* Can behave like a ticker or horizontally scrollable chip row on small screens
 
-### 3. Data Visualization
+### 3. Fast Navigation
 
-* Line and bar charts
-* Date range selection
-* Interactive graphs
+* React Router enables route transitions without full page reload
+* Improves perceived speed significantly
+
+### 4. Data Visualization
+
+* Asset detail and analysis pages display historical charts
+* Supports multiple ranges such as daily, weekly, monthly, yearly
+
+### 5. User Features
+
+* Authentication pages
+* Profile page
+* Comment and interaction pages
+* Expandable social-style features
 
 ---
 
 ## API Integration Details
 
-### External Data Source
+### Backend Role
 
-* Uses Yahoo Finance API
-* Data retrieved periodically
+The Flask backend now primarily acts as an API provider rather than a template-rendering engine.
 
-### Data Processing
+### Example Responsibilities
 
-* JSON parsing
-* Data transformation into models
-* Error handling (timeouts, invalid data, retries)
+* Serve live financial data
+* Provide historical chart data
+* Handle authentication-related operations
+* Deliver profile and comment-related backend logic
+
+### Data Flow
+
+1. React frontend requests data from `/api/*`
+2. Flask processes and returns JSON responses
+3. React components consume and render the data
+4. Shared context distributes live data across pages and UI elements
 
 ---
 
 ## UI & Workflows
 
-### Homepage
+### Previous Limitation
 
-* Uses `templates/index.html`
-* Dynamic rendering with Jinja2
+In the older architecture, page transitions triggered full browser reloads because rendering was handled through Flask + Jinja templates. This negatively affected perceived speed and continuity.  
 
-### User Interactions
+### Updated UI Flow
 
-* Forms for currency conversion and alerts
-* AJAX-based dynamic updates
+* React handles route changes on the client side
+* Layout remains mounted while page content changes
+* Top bar and homepage can consume the same live data source
+* Navigation feels more fluid and modern
+
+### Top Bar Improvement
+
+The redesigned top bar is intended to:
+
+* keep financial items aligned in a cleaner structure
+* avoid asymmetric wrapping problems
+* support smoother horizontal overflow on smaller screens
+* improve readability and consistency
 
 ---
 
 ## Testing
 
-* Selenium-based automated tests
-* Validates:
+### Backend Testing
 
-  * Page loads
-  * Authentication
-  * Currency conversion
-  * Comments and profile features
+* API endpoint validation
+* Business logic checks
+* Historical data and live data response testing
+
+### Frontend Testing
+
+* Route rendering tests
+* Component behavior tests
+* Shared state consistency tests
+* UI responsiveness checks
+
+### Manual Validation Goals
+
+* No unnecessary reload on navigation
+* Top bar remains stable across screen sizes
+* Home page reuses cached/shared live data correctly
+* Asset detail pages fetch the correct chart data
 
 ---
 
 ## Deployment
 
-### Running
+### Development Mode
 
-* Run via `run.py`
-* Access via `http://localhost:8000`
+Backend:
 
-### Production
-
-* Use Gunicorn / uWSGI
-
-### Docker (Optional)
-
-Example Dockerfile:
-
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-ENV FLASK_APP=app/routes.py
-ENV FLASK_ENV=production
-
-EXPOSE 5000
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+```bash
+python run.py
 ```
+
+Frontend:
+
+```bash
+cd finance-react
+npm run dev
+```
+
+### Production Approach
+
+Recommended production model:
+
+* Build React frontend using Vite
+* Serve compiled frontend separately or behind Flask/reverse proxy
+* Keep Flask backend as API service
+* Use Docker for containerized deployment
+
+### Docker
+
+Docker setup can be extended to support:
+
+* Flask backend container
+* React frontend build/container
+* Reverse proxy if needed
 
 ---
 
@@ -314,10 +405,11 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 
 ### Common Issues
 
-* **API errors:** Check API key and connection
-* **Database issues:** Verify configuration
-* **Environment variables:** Ensure `.env` is correct
-* **Server errors:** Check Flask logs
+* **Frontend cannot reach backend:** Check Vite proxy or backend port
+* **Slow data refresh:** Verify polling interval and API response times
+* **Broken top bar layout:** Check responsive CSS and overflow handling
+* **Missing chart data:** Verify backend asset/history endpoints
+* **Dependency errors:** Reinstall both Python and npm dependencies
 
 ### Support
 
@@ -336,23 +428,36 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 
 ### Short-Term
 
-* Add authentication system
-* Improve charts (Chart.js / D3.js)
-* Enhance mobile responsiveness
+* Finalize React SPA migration
+* Improve top bar ticker responsiveness
+* Expand API coverage for all pages
+* Improve component-level error handling
+* Add loading and skeleton states
+
+### Mid-Term
+
+* Better caching strategy for frequently requested data
+* Authentication/session improvements
+* More advanced chart filtering and comparisons
+* Better mobile optimization
 
 ### Long-Term
 
-* WebSocket for real-time updates
-* Multi-language support (i18n)
-* Payment integration / premium features
-* Advanced security (rate limiting, CSRF protection)
+* WebSocket-based real-time updates instead of polling
+* Role-based access and stronger security
+* Notification/alert system
+* Multi-language support
+* Premium analytics features
 
 ---
 
 ## Additional Resources
 
 * Flask Documentation
-* Requests Library
-* Jinja2
-* Yahoo Finance API
-* Crypto Panic API
+* React Documentation
+* Vite Documentation
+* React Router Documentation
+* Financial API provider documentation
+
+```
+
