@@ -8,5 +8,9 @@ requests
 feedparser
 numpy
 gunicorn
+<<<<<<< HEAD
 python-dotenv
 waitress
+=======
+python-dotenv
+>>>>>>> 1d546081434adb9efc9533d04b916628b6944a42
