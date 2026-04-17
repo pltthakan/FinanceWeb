@@ -1,7 +1,3 @@
-Tabii. Bu dokümanda hâlâ eski yapı yazıyor; özellikle **Jinja2 tabanlı view katmanı**, **tam sayfa yenileme mantığı** ve eski klasör yapısı güncellenmeli. Mevcut metinde frontend’in HTML/CSS/JS + Jinja2 olduğu ve sayfaların template üzerinden render edildiği yazıyor.  
-
-Aşağıya direkt yapıştırabileceğin güncel sürümü bırakıyorum:
-
 ````md
 # Finance Tracking Application
 
