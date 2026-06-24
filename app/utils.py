@@ -9,6 +9,24 @@ import yfinance as yf
 from flask import render_template, jsonify, request, session, redirect, url_for, flash
 from app import cache
 
+# Dış veri sağlayıcıları geçici olarak hata verdiğinde boş/0 veri dönmek yerine
+# son başarılı ölçümü göster. SimpleCache süreç içidir; kalıcı bir cache
+# backend'i kullanıldığında aynı anahtarlar süreçler arasında da paylaşılır.
+FALLBACK_TTL = 24 * 60 * 60
+
+
+def _last_success(key, value, is_valid):
+    """Geçerli değeri saklar; geçersizse son geçerli değere geri döner."""
+    if is_valid(value):
+        cache.set(f"fallback:{key}", value, timeout=FALLBACK_TTL)
+        return value
+    fallback = cache.get(f"fallback:{key}")
+    return fallback if fallback is not None else value
+
+
+def _is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
 #########################################
 # YARDIMCI FONKSİYONLAR (yfinance ile verilerin çekilmesi)
 #########################################
@@ -23,20 +41,21 @@ def get_exchange_rates():
     rates = {}
     for currency in currencies:
         ticker_symbol = f"{currency}TRY=X"
+        rate = None
         try:
             ticker = yf.Ticker(ticker_symbol)
             data = ticker.history(period="1d")
             if not data.empty:
                 price = data["Close"].iloc[-1]
-                rates[currency] = round(price, 2)
-            else:
-                rates[currency] = None
+                rate = round(float(price), 2)
         except Exception as e:
             print(f"Error retrieving {ticker_symbol}: {e}")
-            rates[currency] = None
+        rates[currency] = _last_success(
+            f"exchange:{currency}", rate, _is_number
+        )
     return rates
 
-@cache.memoize(timeout=10)
+@cache.memoize(timeout=300)
 def get_crypto_historical_data(crypto_id, days=30):
     """
     Kripto paranın tarihsel verilerini yfinance kullanarak çeker.
@@ -61,10 +80,12 @@ def get_crypto_historical_data(crypto_id, days=30):
                 "time": int(index.timestamp() * 1000),  # milisaniye cinsinden
                 "price": row["Close"]
             })
-        return formatted_prices
+        return _last_success(
+            f"historical:{crypto_id}:{days}", formatted_prices, bool
+        )
     except Exception as e:
         print(f"{crypto_id} tarihsel data yfinance error:", e)
-        return []
+        return _last_success(f"historical:{crypto_id}:{days}", [], bool)
 
 def get_crypto_predictions(crypto_id, days=30, forecast_days=7):
     data = get_crypto_historical_data(crypto_id, days)
@@ -114,7 +135,7 @@ def compute_rsi(prices, period=14):
     rsi = [None] + rsi
     return rsi
 
-@cache.cached(timeout=10, key_prefix='bitcoin_price')
+@cache.cached(timeout=30, key_prefix='bitcoin_price')
 def get_bitcoin_price():
     try:
         btc_ticker = yf.Ticker("BTC-USD")
@@ -124,16 +145,17 @@ def get_bitcoin_price():
         else:
             btc_price_usd = None
         exchange_rates = get_exchange_rates()
-        usd_to_try = exchange_rates.get("USD", 1)
+        usd_to_try = exchange_rates.get("USD") or 1
         if btc_price_usd is not None and usd_to_try is not None:
-            return round(btc_price_usd * usd_to_try, 2)
-        else:
-            return None
+            return _last_success(
+                "bitcoin_price", round(btc_price_usd * usd_to_try, 2), _is_number
+            )
+        return _last_success("bitcoin_price", None, _is_number)
     except Exception as e:
         print("Bitcoin yfinance error:", e)
-        return None
+        return _last_success("bitcoin_price", None, _is_number)
 
-@cache.cached(timeout=10, key_prefix='bitcoin_details')
+@cache.cached(timeout=30, key_prefix='bitcoin_details')
 def get_bitcoin_details():
     try:
         btc_ticker = yf.Ticker("BTC-USD")
@@ -149,7 +171,7 @@ def get_bitcoin_details():
         volume_24h = info.get("volume")
         change_percent = info.get("regularMarketChangePercent")
         exchange_rates = get_exchange_rates()
-        usd_to_try = exchange_rates.get("USD", 1)
+        usd_to_try = exchange_rates.get("USD") or 1
         if btc_price_usd is not None:
             market_data["price_try"] = round(btc_price_usd * usd_to_try, 2)
         if market_cap_usd is not None:
@@ -157,12 +179,15 @@ def get_bitcoin_details():
         if volume_24h is not None:
             market_data["volume_24h_try"] = round(volume_24h * usd_to_try, 2)
         market_data["price_change_percentage_24h"] = change_percent
-        return market_data
+        return _last_success(
+            "bitcoin_details", market_data,
+            lambda item: _is_number(item.get("price_try"))
+        )
     except Exception as e:
         print("Bitcoin detayları yfinance error:", e)
-        return {}
+        return _last_success("bitcoin_details", {}, bool)
 
-@cache.cached(timeout=10, key_prefix='multi_crypto')
+@cache.cached(timeout=30, key_prefix='multi_crypto')
 def get_multi_crypto_data():
     crypto_tickers = {
         "bitcoin": "BTC-USD",
@@ -178,8 +203,9 @@ def get_multi_crypto_data():
     }
     crypto_dict = {}
     exchange_rates = get_exchange_rates()
-    usd_to_try = exchange_rates.get("USD", 1)
+    usd_to_try = exchange_rates.get("USD") or 1
     for crypto, ticker_symbol in crypto_tickers.items():
+        entry = {}
         try:
             ticker = yf.Ticker(ticker_symbol)
             data = ticker.history(period="1d")
@@ -190,20 +216,21 @@ def get_multi_crypto_data():
                 market_cap = info.get("marketCap")
                 volume = info.get("volume")
                 change_percent = info.get("regularMarketChangePercent")
-                crypto_dict[crypto] = {
+                entry = {
                     "price_try": price_try,
                     "market_cap_try": round(market_cap * usd_to_try, 2) if market_cap else "N/A",
                     "volume_24h_try": round(volume * usd_to_try, 2) if volume else "N/A",
                     "price_change_percentage_24h": change_percent if change_percent is not None else "N/A"
                 }
-            else:
-                crypto_dict[crypto] = {}
         except Exception as e:
             print(f"Error retrieving data for {crypto}: {e}")
-            crypto_dict[crypto] = {}
+        crypto_dict[crypto] = _last_success(
+            f"crypto:{crypto}", entry,
+            lambda item: _is_number(item.get("price_try"))
+        )
     return crypto_dict
 
-@cache.cached(timeout=10, key_prefix='multi_crypto_usd')
+@cache.cached(timeout=30, key_prefix='multi_crypto_usd')
 def get_multi_crypto_data_usd():
     crypto_tickers = {
         "bitcoin": "BTC-USD",
@@ -212,23 +239,23 @@ def get_multi_crypto_data_usd():
     }
     crypto_dict = {}
     for crypto, ticker_symbol in crypto_tickers.items():
+        price_usd = None
         try:
             ticker = yf.Ticker(ticker_symbol)
             data = ticker.history(period="1d")
             if not data.empty:
-                price_usd = data["Close"].iloc[-1]
-                crypto_dict[crypto] = round(price_usd, 2)
-            else:
-                crypto_dict[crypto] = None
+                price_usd = round(float(data["Close"].iloc[-1]), 2)
         except Exception as e:
             print(f"Error retrieving USD data for {crypto}: {e}")
-            crypto_dict[crypto] = None
+        crypto_dict[crypto] = _last_success(
+            f"crypto_usd:{crypto}", price_usd, _is_number
+        )
     return crypto_dict
 
-@cache.cached(timeout=10, key_prefix='asset_prices')
+@cache.cached(timeout=30, key_prefix='asset_prices')
 def get_asset_prices():
     exchange_rates = get_exchange_rates()
-    usd_to_try = exchange_rates.get("USD", 1)
+    usd_to_try = exchange_rates.get("USD") or 1
 
     # Altın verisi için (GC=F)
     try:
@@ -281,18 +308,22 @@ def get_asset_prices():
         print("BIST 100 yfinance error:", e)
         bist100 = "N/A"
 
-    return {
+    assets = {
         "gram_altin": round(gold_price_try_per_gram, 2) if gold_price_try_per_gram is not None else 0,
         "ons_altin": round(gold_price_try_per_ounce, 2) if gold_price_try_per_ounce is not None else 0,
         "gumus": round(silver_price_try_per_gram, 2) if silver_price_try_per_gram is not None else 0,
         "bist100": bist100 if isinstance(bist100, (int, float)) else 0
     }
+    return _last_success(
+        "asset_prices", assets,
+        lambda item: any(_is_number(value) and value > 0 for value in item.values())
+    )
 
 #########################################
 # ORİJİNAL PİYASA HABERLERİ (MARKET NEWS) KODU
 #########################################
 
-@cache.cached(timeout=10, key_prefix='market_news')
+@cache.cached(timeout=300, key_prefix='market_news')
 def get_market_news():
     from app.config import Config
     API_URL = Config.API_URL
@@ -308,10 +339,10 @@ def get_market_news():
                     "title": entry.get("title"),
                     "description": entry.get("description")
                 })
-            return formatted_news
+            return _last_success("market_news", formatted_news, bool)
         else:
             print("Haber API hatası:", response.status_code)
-            return []
+            return _last_success("market_news", [], bool)
     except requests.exceptions.RequestException as e:
         print("Haber verisi çekilirken hata:", e)
-        return []
+        return _last_success("market_news", [], bool)

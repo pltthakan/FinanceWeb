@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // Dev proxy: tüm cookie-tabanlı ve API çağrılarını aynı origin'e yönlendirir,
 // böylece Flask session cookie'si sorunsuz çalışır.
-const FLASK = 'http://localhost:8000'
+const FLASK = process.env.VITE_FLASK_URL || 'http://localhost:8000'
 
 export default defineConfig({
   plugins: [react()],

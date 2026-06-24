@@ -12,6 +12,7 @@ import { fetchLiveData } from '../api'
 const LiveDataContext = createContext(null)
 
 const POLL_MS = 60_000
+const RATE_SNAPSHOT_KEY = 'finance_live_rate_snapshot_v1'
 
 export function LiveDataProvider({ children }) {
   const [data, setData] = useState(null)
@@ -19,30 +20,19 @@ export function LiveDataProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState(null)
 
-  // Önceki değerleri saklayalım ki top bar renk göstergesini (yeşil/kırmızı) hesaplayabilelim
-  const prevRef = useRef({})
+  // Son başarılı değerler sayfa yenilense dahi korunur. Böylece ilk render'da
+  // bile fiyatın yönü (artış/azalış/sabit) hesaplanabilir.
+  const prevRef = useRef(readRateSnapshot())
   const timerRef = useRef(null)
 
   const load = useCallback(async () => {
     try {
       const next = await fetchLiveData()
       setData(prev => {
-        // prev'deki sayısal değerleri önceki referans olarak sakla
-        if (prev) {
-          const prevUsd = prev.exchange_rates?.USD || 1
-          prevRef.current = {
-            USD: prev.exchange_rates?.USD,
-            EUR: prev.exchange_rates?.EUR,
-            GBP: prev.exchange_rates?.GBP,
-            GramAltin: prev.asset_prices?.gram_altin,
-            OnsAltin: prev.asset_prices?.ons_altin,
-            Gumus: prev.asset_prices?.gumus,
-            BIST100: prev.asset_prices?.bist100,
-            BTCUSD: divOrNull(prev.other_crypto?.bitcoin?.price_try, prevUsd),
-            ETHUSD: divOrNull(prev.other_crypto?.ethereum?.price_try, prevUsd),
-            XRPUSD: divOrNull(prev.other_crypto?.ripple?.price_try, prevUsd)
-          }
-        }
+        // Uygulama açıksa önceki API yanıtını, ilk yüklemedeyse localStorage
+        // anlık görüntüsünü karşılaştırma tabanı olarak kullan.
+        if (prev) prevRef.current = toRateSnapshot(prev)
+        writeRateSnapshot(toRateSnapshot(next))
         return next
       })
       setError(null)
@@ -154,4 +144,41 @@ function divOrNull(a, b) {
   const n = Number(a) / Number(b)
   if (!Number.isFinite(n)) return null
   return Math.round(n * 100) / 100
+}
+
+function toRateSnapshot(data) {
+  const er = data?.exchange_rates || {}
+  const ap = data?.asset_prices || {}
+  const oc = data?.other_crypto || {}
+  const usd = er.USD || null
+
+  return {
+    USD: er.USD,
+    EUR: er.EUR,
+    GBP: er.GBP,
+    GramAltin: ap.gram_altin,
+    OnsAltin: ap.ons_altin,
+    Gumus: ap.gumus,
+    BIST100: ap.bist100,
+    BTCUSD: divOrNull(oc.bitcoin?.price_try, usd),
+    ETHUSD: divOrNull(oc.ethereum?.price_try, usd),
+    XRPUSD: divOrNull(oc.ripple?.price_try, usd)
+  }
+}
+
+function readRateSnapshot() {
+  try {
+    const raw = localStorage.getItem(RATE_SNAPSHOT_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch {
+    return {}
+  }
+}
+
+function writeRateSnapshot(snapshot) {
+  try {
+    localStorage.setItem(RATE_SNAPSHOT_KEY, JSON.stringify(snapshot))
+  } catch {
+    // Depolama kullanılamıyorsa çubuk yine mevcut oturumda çalışır.
+  }
 }

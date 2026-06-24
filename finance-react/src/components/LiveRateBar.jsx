@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLiveData } from '../context/LiveDataContext.jsx'
 
@@ -35,7 +35,6 @@ export default function LiveRateBar() {
 function RateChip({ item }) {
   const { label, assetName, value, prev, unit } = item
   const [flash, setFlash] = useState(null)  // 'up' | 'down' | null
-  const prevValueRef = useRef(value)
 
   useEffect(() => {
     if (
@@ -47,7 +46,6 @@ function RateChip({ item }) {
       const t = setTimeout(() => setFlash(null), 950)
       return () => clearTimeout(t)
     }
-    prevValueRef.current = value
   }, [value, prev])
 
   const dir = directionOf(value, prev)
@@ -77,7 +75,9 @@ function Arrow({ dir }) {
 }
 
 function directionOf(v, p) {
-  if (typeof v !== 'number' || typeof p !== 'number') return null
+  if (typeof v !== 'number') return null
+  // Önceki ölçüm yoksa da kullanıcıya sabit/nötr durum gösterilir.
+  if (typeof p !== 'number') return 'flat'
   if (v > p) return 'up'
   if (v < p) return 'down'
   return 'flat'

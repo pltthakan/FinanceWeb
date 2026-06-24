@@ -392,11 +392,18 @@ Recommended production model:
 
 ### Docker
 
-Docker setup can be extended to support:
+Tüm uygulamayı tek komutla başlatmak için:
 
-* Flask backend container
-* React frontend build/container
-* Reverse proxy if needed
+```bash
+docker compose up --build
+```
+
+* React SPA: `http://localhost:5173`
+* Flask API: `http://localhost:8000`
+
+React container'ı API isteklerini Docker ağı üzerinden Flask container'ına
+iletir. Servisleri arka planda başlatmak için `docker compose up --build -d`,
+durdurmak için `docker compose down` kullanılır.
 
 ---
 
@@ -457,6 +464,5 @@ Docker setup can be extended to support:
 * Vite Documentation
 * React Router Documentation
 * Financial API provider documentation
-
 
 
