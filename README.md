@@ -31,7 +31,10 @@ The backend remains Flask-based and is now primarily responsible for serving **R
 
 <img width="1470" height="956" alt="Ekran Resmi 2026-04-17 23 25 10" src="https://github.com/user-attachments/assets/59949f84-31ff-435f-ba34-aac4a28fe054" />
 
-<img width="1105" height="858" alt="Ekran Resmi 2026-06-16 14 02 55" src="https://github.com/user-attachments/assets/0223e490-49f9-4567-84c3-00dcd8a3f6ac" />
+
+
+<img width="1470" height="667" alt="Ekran Resmi 2026-06-24 11 32 26" src="https://github.com/user-attachments/assets/ab092ecb-546f-401a-968f-4ce55d81f63a" />
+
 
 
 
